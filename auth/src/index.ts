@@ -3,6 +3,9 @@ import 'express-async-errors'
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
 
+//import { keys } from './config/keys';
+const keys = require('./config/keys');
+
 import { currentUserRouter } from './routes/current-user';
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
@@ -27,7 +30,7 @@ app.use(errorHandler);
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb+srv://ticketing-auth-mongo:bech9GUD.cras8thop@auth-mongo-db.qwetk.mongodb.net/auth?retryWrites=true&w=majority', {
+        await mongoose.connect(keys.dbConnectionString, {
             useNewUrlParser: true,
             useUnifiedTopology: true
             //useCreateIndex: true
