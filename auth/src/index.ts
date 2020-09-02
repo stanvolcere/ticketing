@@ -27,20 +27,18 @@ app.use(errorHandler);
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://auth-mongo-srv:27017/auth'
-            , {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                useCreateIndex: true
-            }
-        ).then(() => {
-            console.log('Connected to mongo db');
-            app.listen(3000, () => {
-                console.log('Listening on port 3000');
-            });
+        await mongoose.connect('mongodb+srv://ticketing-auth-mongo:bech9GUD.cras8thop@auth-mongo-db.qwetk.mongodb.net/auth?retryWrites=true&w=majority', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+            //useCreateIndex: true
         }).catch((e) => {
             console.log("Something went wrong while connecting");
-            console.log(e);
+            console.log(e.message);
+        });
+
+        //console.log('Connected to mongo db');
+        app.listen(3000, () => {
+            console.log('Listening on port 3000');
         });
 
     } catch (err) {
