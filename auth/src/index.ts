@@ -39,7 +39,7 @@ const start = async () => {
             console.log(e.message);
         });
 
-        //console.log('Connected to mongo db');
+        console.log('Connected to mongo db');
         app.listen(3000, () => {
             console.log('Listening on port 3000');
         });

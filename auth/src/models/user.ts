@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../services/password'
 
 // an interface that describes the properties needed to create a user
 interface UserAttrs {
@@ -29,6 +30,18 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+// note: mongoose uses old style callback way of doing async operations
+userSchema.pre('save', async function (done) {
+    // Note: this - represents the current document being handled
+    // check that the password has changed on current save
+    // note the is modified is true even when the document is being first created 
+    if (this.isModified('password')) {
+        const hashed = await Password.toHash(this.get('password'));
+        this.set('password', hashed);
+    }
+    done();
+});
+
 // this extra fundtion allows us to use the Typescript type system to check that we
 // are infact providing the correct params needed to create a user
 userSchema.statics.build = (attrs: UserAttrs) => {
@@ -38,6 +51,5 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 User.build({ email: "test", password: "testing" });
-
 
 export { User };
