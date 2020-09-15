@@ -3,6 +3,7 @@ import { body, validationResult } from 'express-validator';
 import { User } from '../models/user';
 import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request-error";
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -33,6 +34,19 @@ router.post('/api/users/signup', [
     // test out the save process
     const user = User.build({ email, password });
     await user.save();
+
+    // generate the jwt and store it on the cookie session
+    const userJwt = jwt.sign({
+        id: user._id,
+        email: user.email
+    }, 'test');
+
+    // done in this way because typescript doesn't 
+    // want us to assume that there is a session.jwt property persent on the 
+    // req object
+    req.session = {
+        jwt: userJwt
+    };
 
     res.status(201).send({ user });
 });
