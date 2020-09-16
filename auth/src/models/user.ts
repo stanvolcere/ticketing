@@ -28,6 +28,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+}, {
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            // removes a password from an object,
+            // because we do not want to return the user's password
+            delete ret.password;
+            delete ret.__v;
+        }
+    }
 });
 
 // note: mongoose uses old style callback way of doing async operations

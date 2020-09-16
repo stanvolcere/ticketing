@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import { User } from '../models/user';
-import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request-error";
+
+import { validateRequest } from '../middlewares/validate-request';
+
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
@@ -15,12 +17,14 @@ router.post('/api/users/signup', [
         .trim()
         .isLength({ min: 4, max: 20 })
         .withMessage('Password must be between 4 to 20 characters long'),
-], async (req: Request, res: Response) => {
-    const errors = validationResult(req);
+], validateRequest, async (req: Request, res: Response) => {
 
-    if (!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array());
-    }
+    // Note all this has been moved to the validate-request middleware
+    // const errors = validationResult(req);
+
+    // if (!errors.isEmpty()) {
+    //     throw new RequestValidationError(errors.array());
+    // }
 
     const { email, password } = req.body;
 
@@ -39,7 +43,9 @@ router.post('/api/users/signup', [
     const userJwt = jwt.sign({
         id: user._id,
         email: user.email
-    }, 'test');
+        // ! here tells typescript that we're pretty sure (very confident that the var JWT_KEY)
+        // has in fact been set and there's nothing to worry about
+    }, process.env.JWT_KEY!);
 
     // done in this way because typescript doesn't 
     // want us to assume that there is a session.jwt property persent on the 
@@ -48,7 +54,7 @@ router.post('/api/users/signup', [
         jwt: userJwt
     };
 
-    res.status(201).send({ user });
+    res.status(201).send(user);
 });
 
 export { router as signupRouter };
