@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { User } from '../models/user';
 import { BadRequestError } from "../errors/bad-request-error";
-
 import { validateRequest } from '../middlewares/validate-request';
 
 import jwt from 'jsonwebtoken';
@@ -32,7 +31,6 @@ router.post('/api/users/signup', [
 
     if (existingUser) {
         throw new BadRequestError("Email in use");
-        //return res.send({});
     }
 
     // test out the save process
