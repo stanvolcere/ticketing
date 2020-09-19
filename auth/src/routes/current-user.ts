@@ -1,23 +1,11 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { currentUser } from '../middlewares/current-user'
+import { requireAuth } from '../middlewares/require-auth'
 
 const router = express.Router();
 
-router.get('/api/users/currentuser', (req, res) => {
-    // equivalent to - if (!req.session || !req.session.jwt)
-    if (!req.session?.jwt) {
-        return res.send({ currentuser: null });
-    }
-
-    try {
-        // process.env.JWT_KEY! tells typescript that we are sure that this exists
-        const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!);
-
-        // tells the frontend app that thw user is currently logged in
-        res.send({ currentUser: payload });
-    } catch (err) {
-        res.send({ currentUser: null });
-    }
+router.get('/api/users/currentuser', currentUser, requireAuth, (req, res) => {
+    res.send({ currentUser: req.currentUser || null });
 });
 
 export { router as currentUserRouter };
