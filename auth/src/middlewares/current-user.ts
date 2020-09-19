@@ -25,7 +25,6 @@ export const currentUser = (
 
     // equivalent to - if (!req.session || !req.session.jwt)
     if (!req.session?.jwt) {
-        console.log("yo");
         return next();
     }
 
@@ -41,7 +40,5 @@ export const currentUser = (
         // currentUser
         req.currentUser = payload;
     } catch (err) { }
-
-    console.log(req.currentUser);
     next();
 }

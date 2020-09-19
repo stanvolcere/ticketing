@@ -23,7 +23,6 @@ router.post('/api/users/signin', [
         //all validation is now being handled by the reusable validate-request function above
         const { email, password } = req.body;
 
-
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
             throw new BadRequestError("Invalid credentials");
@@ -51,6 +50,7 @@ router.post('/api/users/signin', [
         };
 
         res.status(200).send(existingUser);
+
     });
 
 export { router as signinRouter };

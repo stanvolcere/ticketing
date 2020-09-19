@@ -1,3 +1,4 @@
 node_modules
 auth/node_modules
 auth/src/config/dev.js
+auth/src/test/setup.ts
