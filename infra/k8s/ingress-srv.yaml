@@ -15,9 +15,10 @@ spec:
             backend: 
               serviceName: auth-srv
               servicePort: 3000
-          # - path: /
-          #   backend: 
-          #     serviceName: auth-srv
-          #     servicePort: 3000
+              # matches any uncaught request from the above handlers
+          - path: /?(.*)
+            backend: 
+              serviceName: client-srv
+              servicePort: 3000
 
   
