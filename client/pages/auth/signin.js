@@ -2,13 +2,13 @@ import { useState } from 'react'
 import Router from 'next/router'
 import useRequest from "../../hooks/use-request"
 
-const SignUp = () => {
+const SignIn = () => {
 	// here we are using hooks to set the initial values for the 
 	// below pieces of state
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const { doRequest, errors } = useRequest({
-		url: '/api/users/signup',
+		url: '/api/users/signin',
 		method: 'post',
 		body: {
 			email, password
@@ -28,7 +28,7 @@ const SignUp = () => {
 
 	return (
 		<form onSubmit={onSubmit}>
-			<h1>Sign Up</h1>
+			<h1>Sign In</h1>
 			<div className="form-group">
 				<labal>Email Address</labal>
 				<input className="form-control" onChange={e => setEmail(e.target.value)}></input>
@@ -39,9 +39,9 @@ const SignUp = () => {
 			</div>
 
 			{/*no need to check here because you'll remember that the default is null */  errors}
-			<button className="btn btn-primary">Sign up</button>
+			<button className="btn btn-primary">Sign in</button>
 		</form>
 	)
 }
 
-export default SignUp;
+export default SignIn;
