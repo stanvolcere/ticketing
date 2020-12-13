@@ -4,3 +4,4 @@ auth/src/config/dev.js
 auth/src/test/setup.ts
 client/node_modules
 infra
+skaffold.yaml
