@@ -2,7 +2,6 @@ import 'express-async-errors'
 import mongoose from 'mongoose';
 
 import { app } from './app';
-const keys = require('./config/keys');
 
 const start = async () => {
 	// type guard inserted here to check that that JWT_KEY env variable used 
@@ -11,11 +10,16 @@ const start = async () => {
 
 	// detect the var not being present from way early
 	if (!process.env.JWT_KEY) {
-		throw new Error();
+		throw new Error("JWT_KEY must be defined");
+	}
+
+	// detect the var not being present from way early
+	if (!process.env.MONGO_URI) {
+		throw new Error("MONGO_URI must be defined");
 	}
 
 	try {
-		await mongoose.connect(keys.dbConnectionString, {
+		await mongoose.connect(process.env.MONGO_URI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true
 			//useCreateIndex: true
