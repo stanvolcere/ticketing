@@ -3,5 +3,8 @@ auth/node_modules
 auth/src/config/dev.js
 auth/src/test/setup.ts
 client/node_modules
+tickets/node_modules
+common/node_modules
 infra
+common
 skaffold.yaml
