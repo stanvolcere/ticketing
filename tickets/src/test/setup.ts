@@ -1,7 +1,5 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import request from 'supertest';
-import { app } from '../app';
 import jwt from "jsonwebtoken"
 
 declare global {
@@ -40,24 +38,24 @@ afterAll(async () => {
 });
 
 global.signin = () => {
+	// Build a JWT payload.  { id, email }
 	const payload = {
-		id: "qwerty",
-		email: "test@test.com",
-	}
+		id: "hkjgvlhv;bhoi",
+		email: 'test@test.com',
+	};
 
-	// ! tells typescript to not worry about process.env.JWT_KEY  
-	// potentially being undefined because we are almost certain that 
-	// it is defined
+	// Create the JWT!
 	const token = jwt.sign(payload, process.env.JWT_KEY!);
 
-	const session = { jwt: token }
+	// Build session Object. { jwt: MY_JWT }
+	const session = { jwt: token };
 
-	const sessionJSON = JSON.stringify(session)
+	// Turn that session into JSON
+	const sessionJSON = JSON.stringify(session);
 
+	// Take JSON and encode it as base64
 	const base64 = Buffer.from(sessionJSON).toString('base64');
 
-	console.log(base64)
-
-	// returned as an [] to be compatible with what supertest is expecting
+	// return a string thats the cookie with the encoded data
 	return [`express:sess=${base64}`];
-}
+};
