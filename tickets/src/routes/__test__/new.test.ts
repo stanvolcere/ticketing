@@ -1,6 +1,8 @@
 import request from 'supertest'
 import { app } from "../../app"
 
+import { Ticket } from "../../models/ticket"
+
 it("has a route handler awaiting requests as /api/tickets to create tickets", async () => {
 	const response = await request(app)
 		.post("/api/tickets")
@@ -65,6 +67,11 @@ it("only if a valid price is provided", async () => {
 })
 
 it("creates a ticket with valid inputs", async () => {
+	// find all the tickets that we have
+	let tickets = await Ticket.find({});
+	// we expect there to be 0 at the start
+	expect(tickets.length).toEqual(0)
+
 	// add in a check to make sure an actual ticket was saved
 	await request(app)
 		.post("/api/tickets")
@@ -74,4 +81,8 @@ it("creates a ticket with valid inputs", async () => {
 			price: 20
 		})
 		.expect(201);
+
+	// check that the newly created ticket was actually created 
+	tickets = await Ticket.find({});
+	expect(tickets.length).toEqual(1)
 })
