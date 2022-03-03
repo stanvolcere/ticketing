@@ -3,7 +3,6 @@ import axios from 'axios'
 const buildClient = ({ req }) => {
 	console.log(req)
 	if (typeof window === 'undefined') {
-		console.log("SERVERRRRRRRR!")
 		return axios.create({
 			baseURL: 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
 			// indicates to ingress nginx which domain we want to access from withing the clusters
