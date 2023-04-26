@@ -2,6 +2,7 @@ import 'express-async-errors'
 import mongoose from 'mongoose';
 
 import { app } from './app';
+import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
 	// type guard inserted here to check that that JWT_KEY env variable used 
@@ -19,6 +20,7 @@ const start = async () => {
 	}
 
 	try {
+		await natsWrapper.connect('ticketing', 'arandomstring', 'http://nats-srv:4222');
 		await mongoose.connect(process.env.MONGO_URI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true
